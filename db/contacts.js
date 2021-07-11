@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const {v4} = require("uuid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -45,7 +46,16 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (name, email, phone) => {
-  // ...твой код
+  const newProduct = {name, email, phone, id: v4()};
+    try {
+        const products = await getAll();
+        const newProducts = [...products, newProduct];
+        await updateProducts(newProducts);
+        return newProduct;
+    }
+    catch(error){
+        throw error;
+    }
 };
 
 module.exports = {
