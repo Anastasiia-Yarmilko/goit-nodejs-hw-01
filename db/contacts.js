@@ -1,25 +1,22 @@
-// contacts.js
-
 const fs = require('fs').promises;
 const path = require('path');
 
-// const contactsPath = path.basename('/db/contacts.json');
-const contactsPath = require('./contacts.json');
+const contactsPath = path.join(__dirname, "contacts.json");
 
-function listContacts = async ()=> {
-    try {
-        const data = await fs.readFile(contactsPath);
-        const products = JSON.parse(data);
-        return products;
-    }
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const products = JSON.parse(data);
+    return products;
+  }
   
-    catch(error){
-        error.message = "Cannot read products file";
-        throw error;
-    }
-}
+  catch (error) {
+    error.message = "Cannot read products file";
+    throw error;
+  }
+};
 
-function getContactById = async (contactId)=> {
+const getContactById = async (contactId) => {
   try {
     const products = await listContacts();
     const findProduct = products.find(item => item.contactId === contactId);
@@ -31,15 +28,25 @@ function getContactById = async (contactId)=> {
   catch (error) {
     throw error;
   }
-}
+};
 
-function removeContact(contactId) {
-  // ...твой код
-}
+const removeContact = async (contactId) => {
+  try {
+    const products = await listContacts();
+    const index = products.findIndex(item => item.contactId === contactId);
+    if (index === -1) {
+      throw new Error("Id incorrect");
+    }
+    const filteredProducts = products.filter(item => item.contactId !== contactId);
+    await updateProducts(filteredProducts);
+  } catch (error) {
+    throw error;
+  }
+};
 
-function addContact(name, email, phone) {
+const addContact = async (name, email, phone) => {
   // ...твой код
-}
+};
 
 module.exports = {
     listContacts,
