@@ -1,4 +1,4 @@
-const contacts = require('./db/contacts')
+const contacts = require('./db/contacts');
 
 const { Command } = require('commander');
 const program = new Command();
@@ -13,24 +13,23 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-// TODO: рефакторить
 function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case 'list':
-      // ...
-      break;
+        await contacts.listContacts();
+        break;
 
     case 'get':
-      // ... id
-      break;
+        await contacts.getContactById(id);
+        break;
 
     case 'add':
-      // ... name email phone
-      break;
+        await contacts.addContact(name, email, phone);
+        break;
 
     case 'remove':
-      // ... id
-      break;
+        await contacts.removeContact(id);
+        break;
 
     default:
       console.warn('\x1B[31m Unknown action type!');
