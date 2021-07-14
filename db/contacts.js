@@ -2,29 +2,39 @@ const fs = require('fs').promises;
 const path = require('path');
 const {v4} = require("uuid");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join(__dirname, "./contacts.json");
 
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath);
-    const products = JSON.parse(data);
-    return products;
+    const contacts = JSON.parse(data);
+    return contacts;
   }
   
   catch (error) {
-    error.message = "Cannot read products file";
+    error.message = "Cannot read contacts file";
     throw error;
   }
 };
 
+const updateContacts = async(contacts) => {
+    const str = JSON.stringify(contacts);
+    try {
+        await fs.writeFile(contactsPath, str);
+    } 
+    catch (error) {
+        throw error;
+    }
+};
+
 const getContactById = async (contactId) => {
   try {
-    const products = await listContacts();
-    const findProduct = products.find(item => item.contactId === contactId);
-    if (!findProduct) {
+    const contacts = await listContacts();
+    const findContact = contacts.find(item => item.contactId === contactId);
+    if (!findContact) {
       throw new Error("Id incorrect");
     }
-    return findProduct;
+    return findContact;
   }
   catch (error) {
     throw error;
@@ -33,25 +43,25 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const products = await listContacts();
-    const index = products.findIndex(item => item.contactId === contactId);
+    const contacts = await listContacts();
+    const index = contacts.findIndex(item => item.contactId === contactId);
     if (index === -1) {
       throw new Error("Id incorrect");
     }
-    const filteredProducts = products.filter(item => item.contactId !== contactId);
-    await updateProducts(filteredProducts);
+    const filteredContacts = contacts.filter(item => item.contactId !== contactId);
+    await updateContacts(filteredContacts);
   } catch (error) {
     throw error;
   }
 };
 
 const addContact = async (name, email, phone) => {
-  const newProduct = {name, email, phone, id: v4()};
+  const newContact = {name, email, phone, id: v4()};
     try {
-        const products = await getAll();
-        const newProducts = [...products, newProduct];
-        await updateProducts(newProducts);
-        return newProduct;
+        const contacts = await getAll();
+        const newContacts = [...contacts, newContact];
+        await updateContacts(newContacts);
+        return newContact;
     }
     catch(error){
         throw error;
