@@ -8,7 +8,7 @@ async function listContacts () {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data);
-    return contacts;
+    console.table(contacts);
   }
   
   catch (error) {
@@ -34,7 +34,7 @@ async function getContactById (id) {
     if (!findContact) {
       throw new Error("Id incorrect");
     }
-    return findContact;
+    console.table(findContact);
   }
   catch (error) {
     throw error;
@@ -50,6 +50,7 @@ async function removeContact (id) {
     }
     const filteredContacts = contacts.filter(item => item.id !== id);
     await updateContacts(filteredContacts);
+    console.table(filteredContacts);
   } catch (error) {
     throw error;
   }
@@ -61,7 +62,7 @@ const addContact = async (name, email, phone) => {
         const contacts = await getAll();
         const newContacts = [...contacts, newContact];
         await updateContacts(newContacts);
-        return newContact;
+        console.table(newContact);
     }
     catch(error){
         throw error;
