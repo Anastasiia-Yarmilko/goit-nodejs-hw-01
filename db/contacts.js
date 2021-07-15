@@ -46,11 +46,15 @@ async function getContactById (id) {
 async function removeContact (id) {
   try {
     const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === id);
+    const index = contacts.findIndex((contact) => {
+      return String(contact.id) === String(id);
+    });
     if (index === -1) {
       throw new Error("Id incorrect");
     }
-    const filteredContacts = contacts.filter(item => item.id !== id);
+    const filteredContacts = contacts.filter((contact) => {
+      return String(contact.id) !== String(id);
+    });
     await updateContacts(filteredContacts);
     console.table(filteredContacts);
   } catch (error) {
